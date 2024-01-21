@@ -49,7 +49,7 @@ func New(lg *slog.Logger, cfg rating.Config, probe *readiness.Probe) (*Client, e
 			DisableCompression: true,
 		}).
 		SetBaseURL(fmt.Sprintf("http://%s", net.JoinHostPort(cfg.Host, cfg.Port)))
-	r, err := retry.New[ratingChange]()
+	r, err := retry.New[ratingChange](lg)
 	if err != nil {
 		return nil, fmt.Errorf("retryer: %w", err)
 	}

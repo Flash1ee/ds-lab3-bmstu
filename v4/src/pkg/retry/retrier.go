@@ -10,12 +10,12 @@ import (
 type Client[T any] struct {
 	queue []T
 	mx    sync.RWMutex
-
+	log   *slog.Logger
 	start sync.Once
 }
 
-func New[T any]() (*Client[T], error) {
-	return &Client[T]{}, nil
+func New[T any](log *slog.Logger) (*Client[T], error) {
+	return &Client[T]{log: log}, nil
 }
 
 func (c *Client[T]) Append(v T) error {
@@ -44,9 +44,10 @@ func (c *Client[T]) Start(f func(T) error) error {
 
 		if err := f(i); err != nil {
 			if err := c.Append(i); err != nil {
-				slog.Error("failed to append to queue", "err", err)
+				c.log.Error("failed to append to queue", "err", err)
 			}
 		}
+		c.log.Info("success retry")
 	}
 
 	c.start.Do(func() {
