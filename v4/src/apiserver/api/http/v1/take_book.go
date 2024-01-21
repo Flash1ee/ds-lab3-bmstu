@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 
 	"ds-lab3-bmstu/apiserver/core"
+	"ds-lab3-bmstu/apiserver/services/rating"
 )
 
 type TakeBookRequest struct {
@@ -47,6 +48,9 @@ func (a *api) TakeBook(c echo.Context, req TakeBookRequest) error {
 		c.Request().Context(), req.Username, req.LibraryID, req.BookID, req.End.Time,
 	)
 	if err != nil {
+		if errors.Is(err, rating.ErrUnavaliable) {
+			return c.JSON(http.StatusServiceUnavailable, ErrorResponse{Message: "Bonus Service unavailable"})
+		}
 		status := http.StatusInternalServerError
 		if errors.Is(err, core.ErrInsufficientRating) {
 			status = http.StatusPreconditionFailed

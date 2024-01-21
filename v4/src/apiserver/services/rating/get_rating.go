@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net"
 	"net/http"
 
 	"github.com/sony/gobreaker"
@@ -37,7 +38,12 @@ func (c *Client) getUserRating(ctx context.Context, username string) (rating.Rat
 		SetResult(&v1.RatingResponse{}).
 		Get("/api/v1/rating")
 	if err != nil {
-		return rating.Rating{}, fmt.Errorf("failed to execute http request: %w", err)
+		var dnsError *net.DNSError
+		if errors.As(err, &dnsError) {
+			err = ErrUnavaliable
+		}
+
+		return rating.Rating{}, fmt.Errorf("execute http request: %w", err)
 	}
 
 	if resp.StatusCode() != http.StatusOK {

@@ -1,12 +1,17 @@
 package library
 
-import "context"
+import (
+	"context"
+	"errors"
+)
 
 type Config struct {
 	Host            string
 	Port            string
 	MaxErrorsTrying int64 `mapstructure:"max_errors_trying"`
 }
+
+var ErrUnavaliable = errors.New("rating service unavailable")
 
 type Client interface {
 	GetLibraries(context.Context, string, uint64, uint64) (Infos, error)

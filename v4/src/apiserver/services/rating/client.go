@@ -12,6 +12,7 @@ import (
 
 	"github.com/go-resty/resty/v2"
 
+	"ds-lab3-bmstu/apiserver/core/ports/library"
 	"ds-lab3-bmstu/pkg/circuit_breaker"
 	"ds-lab3-bmstu/pkg/readiness/httpprober"
 	v1 "ds-lab3-bmstu/rating/api/http/v1"
@@ -22,7 +23,10 @@ import (
 
 const probeKey = "http-rating-client"
 
-var ErrInvalidStatusCode = errors.New("invalid status code")
+var (
+	ErrInvalidStatusCode = errors.New("invalid status code")
+	ErrUnavaliable       = library.ErrUnavaliable
+)
 
 type Client struct {
 	lg   *slog.Logger
