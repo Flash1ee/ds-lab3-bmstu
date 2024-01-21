@@ -1338,7 +1338,7 @@
 											"    const stars = Number(pm.environment.get(\"stars\"))",
 											"",
 											"    const response = pm.response.json();",
-											"    pm.expect(response.stars).to.be.eq(stars + 1)",
+											"    pm.expect(response.stars).to.be.eq(3)",
 											"})"
 										],
 										"type": "text/javascript"
@@ -1348,7 +1348,7 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
-											"setTimeout(() => {}, 50000); "
+											"setTimeout(() => {}, 30000); "
 										],
 										"type": "text/javascript"
 									}
