@@ -7,8 +7,6 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/sony/gobreaker"
-
 	"ds-lab3-bmstu/apiserver/core/ports/rating"
 	v1 "ds-lab3-bmstu/rating/api/http/v1"
 )
@@ -24,9 +22,6 @@ func (c *Client) GetUserRating(ctx context.Context, username string) (rating.Rat
 		}
 
 		return res, nil
-	}
-	if errors.Is(err, gobreaker.ErrOpenState) {
-		return rating.Rating{}, nil
 	}
 	return rating.Rating{}, fmt.Errorf("get rating error: %w", err)
 }

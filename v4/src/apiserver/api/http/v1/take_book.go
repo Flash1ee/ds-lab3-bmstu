@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"github.com/sony/gobreaker"
 
 	"ds-lab3-bmstu/apiserver/core"
 	"ds-lab3-bmstu/apiserver/services/rating"
@@ -48,7 +49,7 @@ func (a *api) TakeBook(c echo.Context, req TakeBookRequest) error {
 		c.Request().Context(), req.Username, req.LibraryID, req.BookID, req.End.Time,
 	)
 	if err != nil {
-		if errors.Is(err, rating.ErrUnavaliable) {
+		if errors.Is(err, rating.ErrUnavaliable) || errors.Is(err, gobreaker.ErrOpenState) {
 			return c.JSON(http.StatusServiceUnavailable, ErrorResponse{Message: "Bonus Service unavailable"})
 		}
 		status := http.StatusInternalServerError

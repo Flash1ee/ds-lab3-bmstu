@@ -8,6 +8,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/sony/gobreaker"
+
 	"ds-lab3-bmstu/apiserver/core/ports/library"
 	"ds-lab3-bmstu/apiserver/core/ports/rating"
 	"ds-lab3-bmstu/apiserver/core/ports/reservation"
@@ -64,7 +66,7 @@ func (c *Core) GetLibraryBooks(ctx context.Context, libraryID string, showAll bo
 
 func (c *Core) GetUserRating(ctx context.Context, username string) (rating.Rating, error) {
 	data, err := c.rating.GetUserRating(ctx, username)
-	if err != nil {
+	if err != nil && !errors.Is(err, gobreaker.ErrOpenState) {
 		c.lg.ErrorContext(ctx, "failed to get user rating", "error", err)
 
 		return rating.Rating{}, fmt.Errorf("failed to get user rating: %w", err)
@@ -177,7 +179,7 @@ func (c *Core) TakeBook(ctx context.Context, username, libraryID, bookID string,
 	if uint64(len(reservations)) >= userRating.Stars {
 		c.lg.Warn("insufficient rating", "rating", userRating.Stars)
 
-		return reservation.FullInfo{}, ErrInsufficientRating
+		return reservation.FullInfo{}, fmt.Errorf("insufficient rating")
 	}
 
 	result := reservation.Info{
