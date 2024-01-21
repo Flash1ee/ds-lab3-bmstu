@@ -1,9 +1,12 @@
 package v1
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+
+	"ds-lab3-bmstu/rating/core/ports/ratings"
 )
 
 type RatingRequest struct {
@@ -16,8 +19,12 @@ type RatingResponse struct {
 
 func (a *api) GetRating(c echo.Context, req RatingRequest) error {
 	data, err := a.core.GetUserRating(c.Request().Context(), req.Username)
-	if err != nil {
+	isEmptyUser := errors.Is(err, ratings.ErrNotFound)
+	if err != nil && !isEmptyUser {
 		return c.NoContent(http.StatusInternalServerError)
+	}
+	if isEmptyUser {
+		data.Stars = 101
 	}
 
 	resp := RatingResponse{

@@ -21,6 +21,21 @@ func (c *Client) GetUserRating(ctx context.Context, username string) (rating.Rat
 			return rating.Rating{}, nil
 		}
 
+		if res.Stars == 101 {
+			err := c.retry.Append(ratingChange{
+				username: username,
+				diff:     1,
+			})
+			if err != nil {
+				return rating.Rating{}, fmt.Errorf("append to retryer: %w", err)
+			}
+
+			err = c.retry.Start(c.retryUpdate)
+			if err != nil {
+				return rating.Rating{}, fmt.Errorf("start queue: %w", err)
+			}
+			res.Stars = 1
+		}
 		return res, nil
 	}
 	return rating.Rating{}, fmt.Errorf("get rating error: %w", err)
