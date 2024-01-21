@@ -15,6 +15,7 @@ import (
 	"ds-lab3-bmstu/apiserver/core/ports/library"
 	"ds-lab3-bmstu/pkg/circuit_breaker"
 	"ds-lab3-bmstu/pkg/readiness/httpprober"
+	"ds-lab3-bmstu/pkg/retry"
 	v1 "ds-lab3-bmstu/rating/api/http/v1"
 
 	"ds-lab3-bmstu/apiserver/core/ports/rating"
@@ -28,10 +29,16 @@ var (
 	ErrUnavaliable       = library.ErrUnavaliable
 )
 
+type ratingChange struct {
+	username string
+	diff     int
+}
+
 type Client struct {
-	lg   *slog.Logger
-	conn *resty.Client
-	cb   circuit_breaker.CircuitBreaker
+	lg    *slog.Logger
+	conn  *resty.Client
+	cb    circuit_breaker.CircuitBreaker
+	retry *retry.Client[ratingChange]
 }
 
 func New(lg *slog.Logger, cfg rating.Config, probe *readiness.Probe) (*Client, error) {
@@ -42,6 +49,10 @@ func New(lg *slog.Logger, cfg rating.Config, probe *readiness.Probe) (*Client, e
 			DisableCompression: true,
 		}).
 		SetBaseURL(fmt.Sprintf("http://%s", net.JoinHostPort(cfg.Host, cfg.Port)))
+	r, err := retry.New[ratingChange]()
+	if err != nil {
+		return nil, fmt.Errorf("retryer: %w", err)
+	}
 
 	c := Client{
 		lg:   lg,
@@ -53,6 +64,7 @@ func New(lg *slog.Logger, cfg rating.Config, probe *readiness.Probe) (*Client, e
 			ClearCountsInCloseState:       time.Minute,
 			FailureRequestsToOpenState:    1,
 		}, lg),
+		retry: r,
 	}
 
 	go httpprober.New(lg, client).Ping(probeKey, probe)
@@ -61,6 +73,34 @@ func New(lg *slog.Logger, cfg rating.Config, probe *readiness.Probe) (*Client, e
 }
 
 func (c *Client) UpdateUserRating(
+	ctx context.Context, username string, diff int,
+) error {
+	err := c.updateUserRating(ctx, username, diff)
+	if err != nil {
+		c.lg.Warn("failed to update rating", "err", err, "username", username)
+
+		err := c.retry.Append(ratingChange{
+			username: username,
+			diff:     diff,
+		})
+		if err != nil {
+			return fmt.Errorf("append to retryer: %w", err)
+		}
+
+		err = c.retry.Start(c.retryUpdate)
+		if err != nil {
+			return fmt.Errorf("start queue: %w", err)
+		}
+	}
+
+	return nil
+}
+
+func (c *Client) retryUpdate(v ratingChange) error {
+	return c.updateUserRating(context.Background(), v.username, v.diff)
+}
+
+func (c *Client) updateUserRating(
 	_ context.Context, username string, diff int,
 ) error {
 	resp, err := c.conn.R().
