@@ -10,8 +10,8 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	"ds-lab2-bmstu/pkg/readiness"
-	"ds-lab2-bmstu/reservation/core/ports/reservations"
+	"ds-lab3-bmstu/pkg/readiness"
+	"ds-lab3-bmstu/reservation/core/ports/reservations"
 )
 
 const probeKey = "reservationsdb"

@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"log/slog"
 
-	"ds-lab2-bmstu/apiserver/api/http"
-	"ds-lab2-bmstu/apiserver/config"
-	"ds-lab2-bmstu/apiserver/core"
-	"ds-lab2-bmstu/apiserver/services/library"
-	"ds-lab2-bmstu/apiserver/services/rating"
-	"ds-lab2-bmstu/apiserver/services/reservation"
-	"ds-lab2-bmstu/pkg/apiutils"
-	"ds-lab2-bmstu/pkg/readiness"
+	"ds-lab3-bmstu/apiserver/api/http"
+	"ds-lab3-bmstu/apiserver/config"
+	"ds-lab3-bmstu/apiserver/core"
+	"ds-lab3-bmstu/apiserver/services/library"
+	"ds-lab3-bmstu/apiserver/services/rating"
+	"ds-lab3-bmstu/apiserver/services/reservation"
+	"ds-lab3-bmstu/pkg/apiutils"
+	"ds-lab3-bmstu/pkg/readiness"
 )
 
 type App struct {

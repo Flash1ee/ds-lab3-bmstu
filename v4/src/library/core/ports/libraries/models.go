@@ -1,6 +1,6 @@
 package libraries
 
-import "ds-lab2-bmstu/pkg/collections"
+import "ds-lab3-bmstu/pkg/collections"
 
 type Library struct {
 	ID      string

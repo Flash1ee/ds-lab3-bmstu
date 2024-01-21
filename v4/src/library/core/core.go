@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log/slog"
 
-	"ds-lab2-bmstu/library/core/ports/libraries"
-	"ds-lab2-bmstu/pkg/readiness"
+	"ds-lab3-bmstu/library/core/ports/libraries"
+	"ds-lab3-bmstu/pkg/readiness"
 )
 
 type Core struct {

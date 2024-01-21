@@ -6,8 +6,8 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"ds-lab2-bmstu/pkg/httpwrapper"
-	"ds-lab2-bmstu/reservation/core/ports/reservations"
+	"ds-lab3-bmstu/pkg/httpwrapper"
+	"ds-lab3-bmstu/reservation/core/ports/reservations"
 )
 
 type Core interface {

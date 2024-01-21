@@ -5,10 +5,10 @@ import (
 
 	"github.com/spf13/viper"
 
-	"ds-lab2-bmstu/apiserver/core/ports/reservation"
+	"ds-lab3-bmstu/apiserver/core/ports/reservation"
 
-	"ds-lab2-bmstu/apiserver/core/ports/library"
-	"ds-lab2-bmstu/apiserver/core/ports/rating"
+	"ds-lab3-bmstu/apiserver/core/ports/library"
+	"ds-lab3-bmstu/apiserver/core/ports/rating"
 )
 
 type Config struct {
@@ -27,10 +27,13 @@ func ReadConfig() (*Config, error) {
 	viper.SetDefault("http_addr", ":8080")
 	viper.SetDefault("library.host", "library")
 	viper.SetDefault("library.port", "8060")
+	viper.SetDefault("library.max_errors_trying", "5") // число попыток перехода в закрытое состояние
 	viper.SetDefault("rating.host", "rating")
 	viper.SetDefault("rating.port", "8050")
+	viper.SetDefault("rating.max_errors_trying", "5")
 	viper.SetDefault("reservation.host", "reservation")
 	viper.SetDefault("reservation.port", "8070")
+	viper.SetDefault("reservation.max_errors_trying", "5")
 
 	err := viper.ReadInConfig()
 	if err != nil {

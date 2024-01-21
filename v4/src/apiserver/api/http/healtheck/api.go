@@ -5,7 +5,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"ds-lab2-bmstu/pkg/readiness"
+	"ds-lab3-bmstu/pkg/readiness"
 )
 
 func InitListener(mx *echo.Echo, prober *readiness.Probe) error {

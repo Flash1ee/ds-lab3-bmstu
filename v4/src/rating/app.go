@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"log/slog"
 
-	"ds-lab2-bmstu/pkg/apiutils"
-	"ds-lab2-bmstu/pkg/readiness"
-	"ds-lab2-bmstu/rating/api/http"
-	"ds-lab2-bmstu/rating/config"
-	"ds-lab2-bmstu/rating/core"
-	"ds-lab2-bmstu/rating/services/ratingdb"
+	"ds-lab3-bmstu/pkg/apiutils"
+	"ds-lab3-bmstu/pkg/readiness"
+	"ds-lab3-bmstu/rating/api/http"
+	"ds-lab3-bmstu/rating/config"
+	"ds-lab3-bmstu/rating/core"
+	"ds-lab3-bmstu/rating/services/ratingdb"
 )
 
 type App struct {

@@ -7,10 +7,10 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
-	"ds-lab2-bmstu/pkg/httpvalidator"
-	"ds-lab2-bmstu/pkg/readiness"
-	"ds-lab2-bmstu/reservation/api/http/common"
-	v1 "ds-lab2-bmstu/reservation/api/http/v1"
+	"ds-lab3-bmstu/pkg/httpvalidator"
+	"ds-lab3-bmstu/pkg/readiness"
+	"ds-lab3-bmstu/reservation/api/http/common"
+	v1 "ds-lab3-bmstu/reservation/api/http/v1"
 )
 
 type Core interface {

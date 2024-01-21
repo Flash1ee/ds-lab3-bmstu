@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - develop
   pull_request:
     branches:
       - master
@@ -26,7 +27,7 @@ jobs:
       - name: Run containers
         timeout-minutes: 5
         run: |
-          docker compose up -d
+          docker-compose -f ./docker-compose.local.yml up -d
           ./scripts/wait-script.sh
         env:
           WAIT_PORTS: 8080,8070,8060,8050
@@ -38,8 +39,8 @@ jobs:
         run: ./scripts/test-script.sh
         env:
           VARIANT: v4
-          SERVICE_NAME: library
-          PORT_NUMBER: 8060
+          SERVICE_NAME: rating
+          PORT_NUMBER: 8050
 
       - uses: education/autograding@v1
         id: autograder

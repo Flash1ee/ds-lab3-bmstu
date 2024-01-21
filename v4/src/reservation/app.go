@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"log/slog"
 
-	"ds-lab2-bmstu/pkg/apiutils"
-	"ds-lab2-bmstu/pkg/readiness"
-	"ds-lab2-bmstu/reservation/api/http"
-	"ds-lab2-bmstu/reservation/config"
-	"ds-lab2-bmstu/reservation/core"
-	"ds-lab2-bmstu/reservation/services/reservationdb"
+	"ds-lab3-bmstu/pkg/apiutils"
+	"ds-lab3-bmstu/pkg/readiness"
+	"ds-lab3-bmstu/reservation/api/http"
+	"ds-lab3-bmstu/reservation/config"
+	"ds-lab3-bmstu/reservation/core"
+	"ds-lab3-bmstu/reservation/services/reservationdb"
 )
 
 type App struct {

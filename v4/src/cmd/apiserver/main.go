@@ -4,8 +4,8 @@ import (
 	"log/slog"
 	"os"
 
-	"ds-lab2-bmstu/apiserver"
-	"ds-lab2-bmstu/apiserver/config"
+	"ds-lab3-bmstu/apiserver"
+	"ds-lab3-bmstu/apiserver/config"
 )
 
 func main() {

@@ -4,8 +4,8 @@ import (
 	"log/slog"
 	"os"
 
-	"ds-lab2-bmstu/reservation"
-	"ds-lab2-bmstu/reservation/config"
+	"ds-lab3-bmstu/reservation"
+	"ds-lab3-bmstu/reservation/config"
 )
 
 func main() {

@@ -7,7 +7,7 @@ import (
 	"context"
 	"testing"
 
-	"ds-lab2-bmstu/apiserver/core/ports/rating"
+	"ds-lab3-bmstu/apiserver/core/ports/rating"
 
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"

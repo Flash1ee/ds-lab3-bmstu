@@ -8,11 +8,11 @@ import (
 	"sync"
 	"time"
 
-	"ds-lab2-bmstu/apiserver/core/ports/library"
-	"ds-lab2-bmstu/apiserver/core/ports/rating"
-	"ds-lab2-bmstu/apiserver/core/ports/reservation"
-	"ds-lab2-bmstu/apiserver/domain"
-	"ds-lab2-bmstu/pkg/readiness"
+	"ds-lab3-bmstu/apiserver/core/ports/library"
+	"ds-lab3-bmstu/apiserver/core/ports/rating"
+	"ds-lab3-bmstu/apiserver/core/ports/reservation"
+	"ds-lab3-bmstu/apiserver/domain"
+	"ds-lab3-bmstu/pkg/readiness"
 )
 
 var (
@@ -136,9 +136,9 @@ func (c *Core) GetUserReservations(ctx context.Context, username string) ([]rese
 			End:      reservationData.End,
 		}
 
-		for _, library := range libraries.Items {
-			if reservationData.LibraryID == library.ID {
-				info.ReservedBook.Library = library
+		for _, libraryData := range libraries.Items {
+			if reservationData.LibraryID == libraryData.ID {
+				info.ReservedBook.Library = libraryData
 
 				break
 			}
@@ -167,15 +167,15 @@ func (c *Core) TakeBook(ctx context.Context, username, libraryID, bookID string,
 		return reservation.FullInfo{}, fmt.Errorf("failed to get user reservations: %w", err)
 	}
 
-	rating, err := c.rating.GetUserRating(ctx, username)
+	userRating, err := c.rating.GetUserRating(ctx, username)
 	if err != nil {
 		c.lg.Warn("failed to get rating", "error", err)
 
 		return reservation.FullInfo{}, fmt.Errorf("failed to get user rating: %w", err)
 	}
 
-	if uint64(len(reservations)) >= rating.Stars {
-		c.lg.Warn("insufficient rating", "rating", rating.Stars)
+	if uint64(len(reservations)) >= userRating.Stars {
+		c.lg.Warn("insufficient rating", "rating", userRating.Stars)
 
 		return reservation.FullInfo{}, ErrInsufficientRating
 	}
@@ -196,7 +196,7 @@ func (c *Core) TakeBook(ctx context.Context, username, libraryID, bookID string,
 		return reservation.FullInfo{}, fmt.Errorf("failed to add reservation for obtained book: %w", err)
 	}
 
-	book, err := c.library.ObtainBook(ctx, libraryID, bookID)
+	book, err := c.library.TakeBook(ctx, libraryID, bookID)
 	if err != nil {
 		c.lg.Warn("failed to update books amount", "error", err)
 
@@ -210,7 +210,7 @@ func (c *Core) TakeBook(ctx context.Context, username, libraryID, bookID string,
 		Start:        result.Start,
 		End:          result.End,
 		ReservedBook: book,
-		Rating:       rating,
+		Rating:       userRating,
 	}
 
 	return res, nil

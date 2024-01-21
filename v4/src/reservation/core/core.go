@@ -6,8 +6,8 @@ import (
 
 	"log/slog"
 
-	"ds-lab2-bmstu/pkg/readiness"
-	"ds-lab2-bmstu/reservation/core/ports/reservations"
+	"ds-lab3-bmstu/pkg/readiness"
+	"ds-lab3-bmstu/reservation/core/ports/reservations"
 )
 
 type Core struct {

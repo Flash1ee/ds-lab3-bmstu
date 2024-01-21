@@ -3,8 +3,8 @@ package reservation
 import (
 	"time"
 
-	"ds-lab2-bmstu/apiserver/core/ports/library"
-	"ds-lab2-bmstu/apiserver/core/ports/rating"
+	"ds-lab3-bmstu/apiserver/core/ports/library"
+	"ds-lab3-bmstu/apiserver/core/ports/rating"
 )
 
 type Info struct {

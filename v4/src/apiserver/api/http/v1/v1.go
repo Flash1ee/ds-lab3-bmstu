@@ -5,7 +5,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"ds-lab2-bmstu/pkg/httpwrapper"
+	"ds-lab3-bmstu/pkg/httpwrapper"
 )
 
 type api struct {

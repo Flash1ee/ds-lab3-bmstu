@@ -12,11 +12,12 @@ import (
 
 	"github.com/go-resty/resty/v2"
 
-	"ds-lab2-bmstu/pkg/readiness"
-	"ds-lab2-bmstu/pkg/readiness/httpprober"
-	v1 "ds-lab2-bmstu/reservation/api/http/v1"
+	"ds-lab3-bmstu/pkg/circuit_breaker"
+	"ds-lab3-bmstu/pkg/readiness"
+	"ds-lab3-bmstu/pkg/readiness/httpprober"
+	v1 "ds-lab3-bmstu/reservation/api/http/v1"
 
-	"ds-lab2-bmstu/apiserver/core/ports/reservation"
+	"ds-lab3-bmstu/apiserver/core/ports/reservation"
 )
 
 const probeKey = "http-reservation-client"
@@ -24,9 +25,9 @@ const probeKey = "http-reservation-client"
 var ErrInvalidStatusCode = errors.New("invalid status code")
 
 type Client struct {
-	lg *slog.Logger
-
+	lg   *slog.Logger
 	conn *resty.Client
+	cb   circuit_breaker.CircuitBreaker
 }
 
 func New(lg *slog.Logger, cfg reservation.Config, probe *readiness.Probe) (*Client, error) {
@@ -41,6 +42,13 @@ func New(lg *slog.Logger, cfg reservation.Config, probe *readiness.Probe) (*Clie
 	c := Client{
 		lg:   lg,
 		conn: client,
+		cb: circuit_breaker.New(circuit_breaker.Settings{
+			Name:                          "reservation_cb",
+			MaxErrorsFromHalfToCloseState: uint32(cfg.MaxErrorsTrying),
+			TimeoutFromOpenToHalfState:    time.Second * 5,
+			ClearCountsInCloseState:       time.Minute,
+			FailureRequestsToOpenState:    1,
+		}, lg),
 	}
 
 	go httpprober.New(lg, client).Ping(probeKey, probe)

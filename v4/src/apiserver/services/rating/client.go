@@ -12,11 +12,12 @@ import (
 
 	"github.com/go-resty/resty/v2"
 
-	"ds-lab2-bmstu/pkg/readiness/httpprober"
-	v1 "ds-lab2-bmstu/rating/api/http/v1"
+	"ds-lab3-bmstu/pkg/circuit_breaker"
+	"ds-lab3-bmstu/pkg/readiness/httpprober"
+	v1 "ds-lab3-bmstu/rating/api/http/v1"
 
-	"ds-lab2-bmstu/apiserver/core/ports/rating"
-	"ds-lab2-bmstu/pkg/readiness"
+	"ds-lab3-bmstu/apiserver/core/ports/rating"
+	"ds-lab3-bmstu/pkg/readiness"
 )
 
 const probeKey = "http-rating-client"
@@ -24,9 +25,9 @@ const probeKey = "http-rating-client"
 var ErrInvalidStatusCode = errors.New("invalid status code")
 
 type Client struct {
-	lg *slog.Logger
-
+	lg   *slog.Logger
 	conn *resty.Client
+	cb   circuit_breaker.CircuitBreaker
 }
 
 func New(lg *slog.Logger, cfg rating.Config, probe *readiness.Probe) (*Client, error) {
@@ -41,33 +42,18 @@ func New(lg *slog.Logger, cfg rating.Config, probe *readiness.Probe) (*Client, e
 	c := Client{
 		lg:   lg,
 		conn: client,
+		cb: circuit_breaker.New(circuit_breaker.Settings{
+			Name:                          "rating_cb",
+			MaxErrorsFromHalfToCloseState: uint32(cfg.MaxErrorsTrying),
+			TimeoutFromOpenToHalfState:    time.Second * 5,
+			ClearCountsInCloseState:       time.Minute,
+			FailureRequestsToOpenState:    1,
+		}, lg),
 	}
 
 	go httpprober.New(lg, client).Ping(probeKey, probe)
 
 	return &c, nil
-}
-
-func (c *Client) GetUserRating(
-	_ context.Context, username string,
-) (rating.Rating, error) {
-	resp, err := c.conn.R().
-		SetHeader("X-User-Name", username).
-		SetResult(&v1.RatingResponse{}).
-		Get("/api/v1/rating")
-	if err != nil {
-		return rating.Rating{}, fmt.Errorf("failed to execute http request: %w", err)
-	}
-
-	if resp.StatusCode() != http.StatusOK {
-		return rating.Rating{}, fmt.Errorf("%d: %w", resp.StatusCode(), ErrInvalidStatusCode)
-	}
-
-	data, _ := resp.Result().(*v1.RatingResponse)
-
-	rating := rating.Rating(*data)
-
-	return rating, nil
 }
 
 func (c *Client) UpdateUserRating(

@@ -10,10 +10,10 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
-	"ds-lab2-bmstu/apiserver/core/ports/library"
-	"ds-lab2-bmstu/apiserver/core/ports/rating"
-	"ds-lab2-bmstu/apiserver/core/ports/reservation"
-	"ds-lab2-bmstu/pkg/readiness"
+	"ds-lab3-bmstu/apiserver/core/ports/library"
+	"ds-lab3-bmstu/apiserver/core/ports/rating"
+	"ds-lab3-bmstu/apiserver/core/ports/reservation"
+	"ds-lab3-bmstu/pkg/readiness"
 )
 
 type TestSuite struct {

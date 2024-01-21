@@ -8,7 +8,7 @@ import (
 
 	"gorm.io/gorm"
 
-	"ds-lab2-bmstu/pkg/readiness"
+	"ds-lab3-bmstu/pkg/readiness"
 )
 
 type migrationItem struct {

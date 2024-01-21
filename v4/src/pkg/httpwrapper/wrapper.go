@@ -6,7 +6,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"ds-lab2-bmstu/pkg/httpvalidator"
+	"ds-lab3-bmstu/pkg/httpvalidator"
 )
 
 type ValidationErrorResponse struct {

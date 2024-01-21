@@ -6,7 +6,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"ds-lab2-bmstu/reservation/core/ports/reservations"
+	"ds-lab3-bmstu/reservation/core/ports/reservations"
 )
 
 type AddReservationRequest struct {

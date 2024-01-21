@@ -7,11 +7,11 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
-	"ds-lab2-bmstu/apiserver/api/http/healtheck"
+	"ds-lab3-bmstu/apiserver/api/http/healtheck"
 
-	v1 "ds-lab2-bmstu/apiserver/api/http/v1"
-	"ds-lab2-bmstu/pkg/httpvalidator"
-	"ds-lab2-bmstu/pkg/readiness"
+	v1 "ds-lab3-bmstu/apiserver/api/http/v1"
+	"ds-lab3-bmstu/pkg/httpvalidator"
+	"ds-lab3-bmstu/pkg/readiness"
 )
 
 type Core interface {

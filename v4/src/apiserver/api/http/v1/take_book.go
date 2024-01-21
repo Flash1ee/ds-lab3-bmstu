@@ -8,7 +8,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"ds-lab2-bmstu/apiserver/core"
+	"ds-lab3-bmstu/apiserver/core"
 )
 
 type TakeBookRequest struct {

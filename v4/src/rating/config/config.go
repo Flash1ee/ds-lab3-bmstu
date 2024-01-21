@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/viper"
 
-	"ds-lab2-bmstu/rating/core/ports/ratings"
+	"ds-lab3-bmstu/rating/core/ports/ratings"
 )
 
 type Config struct {

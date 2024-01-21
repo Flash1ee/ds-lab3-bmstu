@@ -3,8 +3,9 @@ package rating
 import "context"
 
 type Config struct {
-	Host string
-	Port string
+	Host            string
+	Port            string
+	MaxErrorsTrying int64 `mapstructure:"max_errors_trying"`
 }
 
 type Client interface {

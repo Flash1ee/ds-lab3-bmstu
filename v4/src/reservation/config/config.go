@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/viper"
 
-	"ds-lab2-bmstu/reservation/core/ports/reservations"
+	"ds-lab3-bmstu/reservation/core/ports/reservations"
 )
 
 type Config struct {

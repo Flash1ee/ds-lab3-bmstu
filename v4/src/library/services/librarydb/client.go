@@ -10,8 +10,8 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 
-	"ds-lab2-bmstu/library/core/ports/libraries"
-	"ds-lab2-bmstu/pkg/readiness"
+	"ds-lab3-bmstu/library/core/ports/libraries"
+	"ds-lab3-bmstu/pkg/readiness"
 )
 
 const probeKey = "librariesdb"

@@ -4,8 +4,8 @@ import (
 	"log/slog"
 	"os"
 
-	"ds-lab2-bmstu/rating"
-	"ds-lab2-bmstu/rating/config"
+	"ds-lab3-bmstu/rating"
+	"ds-lab3-bmstu/rating/config"
 )
 
 func main() {
